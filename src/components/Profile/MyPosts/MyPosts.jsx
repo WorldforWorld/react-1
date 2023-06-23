@@ -1,17 +1,18 @@
 import React from "react";
 import classes from "./MyPosts.module.css";
 import Post from "./Post/Post";
+
 const MyPosts = props => {
   const postsElements = props.posts.map(p => (
-    <Post message={p.message} likesCount={p.likesCount} />
+    <Post message={p.message} likesCount={p.likesCount} key={p.id} />
   ));
   const newPostElement = React.createRef();
-  const addPost = () => {
-    props.dispatch({ type: "ADD-POST" });
+  const onAddPost = () => {
+    props.addPost();
   };
   const onPostChange = () => {
     const text = newPostElement.current.value;
-    props.dispatch({ type: "UPDATE-NEW-POST-TEXT", newText: text });
+    props.updateNewPostText(text);
   };
   return (
     <div className={classes.postsBlock}>
@@ -25,7 +26,7 @@ const MyPosts = props => {
           />
         </div>
         <div>
-          <button onClick={addPost}>Add Post</button>
+          <button onClick={onAddPost}>Add Post</button>
         </div>
       </div>
       <div className={classes.posts}>{postsElements}</div>
