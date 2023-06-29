@@ -1,42 +1,30 @@
-import { NavLink } from "react-router-dom";
+import axios from "axios";
 import userPhoto from "../../assets/images/user.png";
 import styles from "./users.module.css";
 const Users = props => {
-  const pagesCount = Math.ceil(props.totalUserCount / props.pageSize);
-  const pages = [];
-  for (let i = 1; i <= pagesCount; i++) {
-    if (pages.length < props.pageSize * 5) {
-      pages.push(i);
+  const getUsers = () => {
+    if (props.users.length === 0) {
+      axios
+        .get("https://social-network.samuraijs.com/api/1.0/users")
+        .then(response => {
+          debugger;
+          props.setUsers(response.data.items);
+        });
     }
-  }
+  };
+
   return (
     <div>
-      <div>
-        {pages.map(p => {
-          return (
-            <span
-              className={props.currentPage === p && styles.selectedPage}
-              onClick={e => {
-                props.onPageChanged(p);
-              }}
-              key={p}
-            >
-              {p}
-            </span>
-          );
-        })}
-      </div>
+      <button onClick={getUsers}>Get Users</button>
       {props.users.map(u => (
         <div key={u.id}>
           <span>
             <div>
-              <NavLink to={"/profile/" + u.id}>
-                <img
-                  src={u.photos.small != null ? u.photos.small : userPhoto}
-                  alt="phot"
-                  className={styles.userPhoto}
-                />
-              </NavLink>
+              <img
+                src={u.photos.small != null ? u.photos.small : userPhoto}
+                alt="phot"
+                className={styles.userPhoto}
+              />
             </div>
             <div>
               {u.followed ? (
