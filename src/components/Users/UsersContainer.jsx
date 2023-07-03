@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import {
   follow,
   getUsers,
@@ -46,6 +45,5 @@ const mapStateToProps = state => ({
   followingInProgress: state.usersPage.followingInProgress,
 });
 export default compose(
-  withAuthRedirect,
   connect(mapStateToProps, { follow, unfollow, setCurrentPagep, getUsers })
 )(UsersContainer);
