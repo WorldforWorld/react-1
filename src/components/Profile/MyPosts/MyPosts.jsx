@@ -4,14 +4,17 @@ import {
   maxLenthCreator,
   required,
 } from "../../../utils/validators/validators";
+import { Textarea } from "../../common/FomsControls/FormsControls";
 import classes from "./MyPosts.module.css";
 import Post from "./Post/Post";
-import { Textarea } from "../../common/FomsControls/FormsControls";
 
-const MyPosts = props => {
-  const postsElements = props.posts.map(p => (
-    <Post message={p.message} likesCount={p.likesCount} key={p.id} />
-  ));
+const MyPosts = React.memo(props => {
+  console.log("render");
+  const postsElements = [...props.posts]
+    .reverse()
+    .map(p => (
+      <Post message={p.message} likesCount={p.likesCount} key={p.id} />
+    ));
   const onAddPost = values => {
     props.addPost(values.newPostText);
   };
@@ -22,7 +25,7 @@ const MyPosts = props => {
       <div className={classes.posts}>{postsElements}</div>
     </div>
   );
-};
+});
 
 const maxLength10 = maxLenthCreator(10);
 let AddNewPostForm = props => {
