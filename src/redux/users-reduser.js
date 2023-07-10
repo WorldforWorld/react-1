@@ -86,10 +86,11 @@ export const setCurrentPagep = currentPage => ({
   currentPage,
 });
 
-export const getUsers = (currentPage, pageSize) => dispath => {
+export const getUsers = (page, pageSize) => dispath => {
   dispath(toggleIsFetching(true));
+  dispath(setCurrentPagep(page));
 
-  usersAPI.getUsers(currentPage, pageSize).then(data => {
+  usersAPI.getUsers(page, pageSize).then(data => {
     dispath(toggleIsFetching(false));
     dispath(setUsers(data.items));
     dispath(setTotalUsersCount(data.totalCount));
