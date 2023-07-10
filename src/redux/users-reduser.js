@@ -1,4 +1,5 @@
 import { usersAPI } from "../api/api";
+import { updateObjectInArray } from "../utils/object-helpers";
 
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
@@ -22,21 +23,15 @@ const usersReducer = (state = initialState, action) => {
     case FOLLOW:
       return {
         ...state,
-        users: state.users.map(u => {
-          if (u.id === action.userId) {
-            return { ...u, followed: true };
-          }
-          return u;
+        users: updateObjectInArray(state.users, action.userId, "id", {
+          followed: true,
         }),
       };
     case UNFOLLOW:
       return {
         ...state,
-        users: state.users.map(u => {
-          if (u.id === action.userId) {
-            return { ...u, followed: false };
-          }
-          return u;
+        users: updateObjectInArray(state.users, action.userId, "id", {
+          followed: false,
         }),
       };
     case SET_USERS:
@@ -86,35 +81,38 @@ export const setCurrentPagep = currentPage => ({
   currentPage,
 });
 
-export const getUsers = (page, pageSize) => dispath => {
+export const getUsers = (page, pageSize) => async dispath => {
   dispath(toggleIsFetching(true));
   dispath(setCurrentPagep(page));
 
-  usersAPI.getUsers(page, pageSize).then(data => {
-    dispath(toggleIsFetching(false));
-    dispath(setUsers(data.items));
-    dispath(setTotalUsersCount(data.totalCount));
-  });
+  const data = await usersAPI.getUsers(page, pageSize);
+  dispath(toggleIsFetching(false));
+  dispath(setUsers(data.items));
+  dispath(setTotalUsersCount(data.totalCount));
+};
+const followUnfollowFlow = async (
+  dispath,
+  userId,
+  apiMethod,
+  actionCreator
+) => {
+  dispath(toggleFollowingInProgress(true, userId));
+  const data = await apiMethod(userId);
+  if (data.resultCode === 0) {
+    dispath(actionCreator(userId));
+  }
+  dispath(toggleFollowingInProgress(false, userId));
+};
+export const follow = userId => async dispath => {
+  const apiMethod = usersAPI.follow.bind(usersAPI);
+  const actionCreator = followSuccess;
+  followUnfollowFlow(dispath, userId, apiMethod, actionCreator);
 };
 
-export const follow = userId => dispath => {
-  dispath(toggleFollowingInProgress(true, userId));
-  usersAPI.follow(userId).then(data => {
-    if (data.resultCode === 0) {
-      dispath(followSuccess(userId));
-    }
-    dispath(toggleFollowingInProgress(false, userId));
-  });
-};
-
-export const unfollow = userId => dispath => {
-  dispath(toggleFollowingInProgress(true, userId));
-  usersAPI.unfollow(userId).then(data => {
-    if (data.resultCode === 0) {
-      dispath(unfollowSuccess(userId));
-    }
-    dispath(toggleFollowingInProgress(false, userId));
-  });
+export const unfollow = userId => async dispath => {
+  const apiMethod = usersAPI.unfollow.bind(usersAPI);
+  const actionCreator = unfollowSuccess;
+  followUnfollowFlow(dispath, userId, apiMethod, actionCreator);
 };
 
 export default usersReducer;
