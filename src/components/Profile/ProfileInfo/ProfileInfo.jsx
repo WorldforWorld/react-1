@@ -1,6 +1,5 @@
 import Preloader from "../../common/Preloader/Preloader";
 import s from "./ProfileInfo.module.css";
-import ProfileStatus from "./ProfileStatus";
 import ProfileStatusWithHooks from "./ProfileStatusWithHooks";
 const ProfileInfo = props => {
   if (!props.profile) {
@@ -9,9 +8,6 @@ const ProfileInfo = props => {
 
   return (
     <div>
-      {/* <div>
-        <img src="https://media.istockphoto.com/id/1323860984/vector/green-background-in-vector-illustration-with-glow-and-lights.jpg?s=612x612&w=0&k=20&c=8IJexeaZOCxSRrNiCCgUvB-dexsy8w9PEF1IF8v4skU=" />
-      </div> */}
       <div className={s.descriptionBlock}>
         <img src={props.profile.photos.large} alt="photos" />
         <ProfileStatusWithHooks

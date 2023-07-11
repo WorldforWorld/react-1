@@ -1,6 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Route, Routes, useParams } from "react-router-dom";
+import { Provider, connect } from "react-redux";
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import { compose } from "redux";
 import "./App.css";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
@@ -11,6 +11,7 @@ import ProfileContainer from "./components/Profile/ProfileContainer";
 import UsersContainer from "./components/Users/UsersContainer";
 import Preloader from "./components/common/Preloader/Preloader";
 import { initializeApp } from "./redux/app-reduser";
+import store from "./redux/reduc-store";
 export function withRouter(Children) {
   return props => {
     const match = { params: useParams() };
@@ -44,7 +45,19 @@ class App extends React.Component {
 const mapStateToProps = state => ({
   initialized: state.app.state,
 });
-export default compose(
+const AppContainer = compose(
   withRouter,
   connect(mapStateToProps, { initializeApp })
 )(App);
+const SamuraiJSApp = props => {
+  return (
+    <React.StrictMode>
+      <BrowserRouter>
+        <Provider store={store}>
+          <AppContainer />
+        </Provider>
+      </BrowserRouter>
+    </React.StrictMode>
+  );
+};
+export default SamuraiJSApp;
