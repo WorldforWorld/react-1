@@ -21,16 +21,6 @@ const reducers = combineReducers({
   form: FormReducer,
   app: appReducer,
 });
-// import { composeWithDevTools } from "redux-devtools-extension";
-
-// const composeEnhancers = composeWithDevTools(options);
-// const store = createStore(
-//   reducer,
-//   /* preloadedState, */ composeEnhancers(
-//     applyMiddleware(...middleware)
-//     // other store enhancers if any
-//   )
-// );
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducers,

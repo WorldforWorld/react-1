@@ -5,12 +5,3 @@ test("renders learn react link", () => {
   ReactDOM.render(<SamuraiJSApp />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
-
-// import { createRoot } from 'react-dom/client';
-
-// test('renders without crashing', () => {
-//     const container = document.createElement('div');
-//     const root = createRoot(container);
-//     root.render(<SamuraiJSApp tab="home" />);
-//     root.unmount();
-//   });

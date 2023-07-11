@@ -1,17 +1,21 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Provider, connect } from "react-redux";
 import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import { compose } from "redux";
 import "./App.css";
-import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
 import Navbar from "./components/Navbar/Navbar";
-import ProfileContainer from "./components/Profile/ProfileContainer";
 import UsersContainer from "./components/Users/UsersContainer";
 import Preloader from "./components/common/Preloader/Preloader";
 import { initializeApp } from "./redux/app-reduser";
-import store from "./redux/reduc-store";
+import store from "./redux/redux-store";
+const ProfileContainer = lazy(() =>
+  import("./components/Profile/ProfileContainer")
+);
+const DialogsContainer = lazy(() =>
+  import("./components/Dialogs/DialogsContainer")
+);
 export function withRouter(Children) {
   return props => {
     const match = { params: useParams() };
@@ -31,12 +35,14 @@ class App extends React.Component {
         <HeaderContainer />
         <Navbar />
         <div className="app-wrapper-content">
-          <Routes>
-            <Route path="/dialogs" element={<DialogsContainer />} />
-            <Route path="/profile/:userId?" element={<ProfileContainer />} />
-            <Route path="/users" element={<UsersContainer />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
+          <Suspense fallback={<Preloader />}>
+            <Routes>
+              <Route path="/dialogs" element={<DialogsContainer />} />
+              <Route path="/profile/:userId?" element={<ProfileContainer />} />
+              <Route path="/users" element={<UsersContainer />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </Suspense>
         </div>
       </div>
     );
@@ -52,7 +58,7 @@ const AppContainer = compose(
 const SamuraiJSApp = props => {
   return (
     <React.StrictMode>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Provider store={store}>
           <AppContainer />
         </Provider>

@@ -5,6 +5,7 @@ const Users = ({
   totalUserCount,
   pageSize,
   onPageChanged,
+  portionSize,
   users,
   ...props
 }) => {
@@ -15,6 +16,7 @@ const Users = ({
         onPageChanged={onPageChanged}
         totalUserCount={totalUserCount}
         pageSize={pageSize}
+        portionSize={portionSize}
       />
       {users.map(u => (
         <User
