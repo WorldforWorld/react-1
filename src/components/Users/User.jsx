@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import userPhoto from "../../assets/images/user.png";
-import Paginator from "../common/Paginator/Paginator";
 import styles from "./users.module.css";
 const User = ({ user, followingInProgress, unfollow, follow }) => {
   return (
@@ -9,7 +8,7 @@ const User = ({ user, followingInProgress, unfollow, follow }) => {
         <div>
           <NavLink to={"/profile/" + user.id}>
             <img
-              src={user.photos.small != null ? user.photos.small : userPhoto}
+              src={user.photos.small || userPhoto}
               alt="phot"
               className={styles.userPhoto}
             />

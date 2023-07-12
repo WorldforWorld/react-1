@@ -58,6 +58,7 @@ const AppContainer = compose(
 const SamuraiJSApp = props => {
   return (
     <React.StrictMode>
+      {/* HashRouter - только для gh-pages используется без basename */}
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Provider store={store}>
           <AppContainer />
