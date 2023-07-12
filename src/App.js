@@ -1,6 +1,12 @@
 import React, { Suspense, lazy } from "react";
 import { Provider, connect } from "react-redux";
-import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
 import { compose } from "redux";
 import "./App.css";
 import HeaderContainer from "./components/Header/HeaderContainer";
@@ -37,10 +43,12 @@ class App extends React.Component {
         <div className="app-wrapper-content">
           <Suspense fallback={<Preloader />}>
             <Routes>
+              <Route exact path="/" element={<Navigate to={"/profile"} />} />
               <Route path="/dialogs" element={<DialogsContainer />} />
               <Route path="/profile/:userId?" element={<ProfileContainer />} />
               <Route path="/users" element={<UsersContainer />} />
               <Route path="/login" element={<Login />} />
+              <Route path="*" element={<div>404 NOT FOUND</div>} />
             </Routes>
           </Suspense>
         </div>
