@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { reduxForm } from "redux-form";
-import { login } from "../../redux/auth-reduser";
+import { login } from "../../redux/auth-reduser.ts";
 import { required } from "../../utils/validators/validators";
 import { Input, createField } from "../common/FomsControls/FormsControls";
 import style from "../common/FomsControls/FormsControls.module.css";

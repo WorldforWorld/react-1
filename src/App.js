@@ -14,7 +14,7 @@ import Login from "./components/Login/Login";
 import Navbar from "./components/Navbar/Navbar";
 import UsersContainer from "./components/Users/UsersContainer";
 import Preloader from "./components/common/Preloader/Preloader";
-import { initializeApp } from "./redux/app-reduser";
+import { initializeApp } from "./redux/app-reduser.ts";
 import store from "./redux/redux-store";
 const ProfileContainer = lazy(() =>
   import("./components/Profile/ProfileContainer")

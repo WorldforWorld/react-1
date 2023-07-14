@@ -1,4 +1,5 @@
 import { usersAPI } from "../api/api";
+import { UserType } from "../types/types";
 import { updateObjectInArray } from "../utils/object-helpers";
 
 const FOLLOW = "FOLLOW";
@@ -10,7 +11,7 @@ const TOGGLE_IS_FETCHING = "TOGGLE-IS-FETCHING";
 const TOGGLE_IS_FOLLOWING_PROGRESS = "TOGGLE-IS-FOLLOWING-PROGRESS";
 
 const initialState = {
-  users: [],
+  users: [] as Array<UserType>,
   pageSize: 5,
   totalUserCount: 0,
   portionSize: 10,

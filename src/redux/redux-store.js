@@ -6,8 +6,8 @@ import {
 } from "redux";
 import { reducer as FormReducer } from "redux-form";
 import ThunkMiddleware from "redux-thunk";
-import appReducer from "./app-reduser";
-import authReducer from "./auth-reduser";
+import appReducer from "./app-reduser.ts";
+import authReducer from "./auth-reduser.ts";
 import dialogsReducer from "./dialogs-reducer";
 import profileReducer from "./profile-reducer";
 import sidebarReducer from "./sidebar-reducer";
