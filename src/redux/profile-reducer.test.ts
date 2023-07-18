@@ -1,17 +1,18 @@
-import profileReducer, {
-  addPostActionCreator,
-  deletePost,
-} from "./profile-reducer";
+import profileReducer, { actions } from "./profile-reducer";
 
 let state = {
   posts: [
     { id: 1, message: "Hi, how are you?", likesCount: 0 },
     { id: 2, message: "It's my first post", likesCount: 165 },
   ],
+  profile: null,
+  status: "",
+  newPostText: "",
 };
 it("new post shold be added", () => {
   // 1. test data
-  let action = addPostActionCreator("test-text");
+  let action = actions.addPostActionCreator("test-text");
+
   // 2. action
   let newState = profileReducer(state, action);
 
@@ -20,7 +21,8 @@ it("new post shold be added", () => {
 });
 it("after deleting length of messages should be decrement", () => {
   // 1. test data
-  let action = deletePost(1);
+  let action = actions.deletePost(1);
+
   // 2. action
   let newState = profileReducer(state, action);
 

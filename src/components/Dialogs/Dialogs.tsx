@@ -1,10 +1,14 @@
 import { Navigate } from "react-router-dom";
+import { initialStateType } from "../../redux/dialogs-reducer";
 import AddMessageForm from "./AddMessageForm/AddMessageForm";
 import DialogItem from "./DialogItem/DialogItem";
 import s from "./Dialogs.module.css";
 import Message from "./Message/Dialogs";
-
-const Dialogs = props => {
+type OwnPropsType = {
+  dialogsPage: initialStateType;
+  sendMessage: (messageTExt: string) => void;
+};
+const Dialogs: React.FC<OwnPropsType> = props => {
   const state = props.dialogsPage;
 
   const dialogsElements = state.dialogs.map(d => (
@@ -15,10 +19,9 @@ const Dialogs = props => {
     <Message message={m.message} key={m.id} />
   ));
 
-  const addNewMessage = values => {
+  const addNewMessage = (values: { newMessageBody: string }) => {
     props.sendMessage(values.newMessageBody);
   };
-  if (!props.isAuth) return <Navigate to={"/login"} />;
   return (
     <div className={s.dialogs}>
       <div className={s.dialogsItems}>{dialogsElements}</div>

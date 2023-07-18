@@ -46,7 +46,10 @@ class App extends React.Component {
               <Route exact path="/" element={<Navigate to={"/profile"} />} />
               <Route path="/dialogs" element={<DialogsContainer />} />
               <Route path="/profile/:userId?" element={<ProfileContainer />} />
-              <Route path="/users" element={<UsersContainer />} />
+              <Route
+                path="/users"
+                element={<UsersContainer pageTitle={"Самурай"} />}
+              />
               <Route path="/login" element={<Login />} />
               <Route path="*" element={<div>404 NOT FOUND</div>} />
             </Routes>
