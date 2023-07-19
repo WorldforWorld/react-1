@@ -1,13 +1,20 @@
 import { NavLink } from "react-router-dom";
-import classes from "./Header.module.css";
-const Header = props => {
+import s from "./Header.module.css";
+export type MapPropsType = {
+  isAuth: boolean;
+  login: string | null;
+};
+export type DispatchPropsType = {
+  logout: () => void;
+};
+const Header: React.FC<MapPropsType & DispatchPropsType> = props => {
   return (
-    <header className={classes.header}>
+    <header className={s.header}>
       <img
         src="https://upload.wikimedia.org/wikipedia/commons/3/33/Vanamo_Logo.png"
         alt="logo"
       />
-      <div className={classes.loginBlock}>
+      <div className={s.loginBlock}>
         {props.isAuth ? (
           <div>
             {props.login} - <button onClick={props.logout}>Log out</button>

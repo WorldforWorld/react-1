@@ -8,6 +8,11 @@ type OwnPropsType = {
   dialogsPage: initialStateType;
   sendMessage: (messageTExt: string) => void;
 };
+
+export type NewMessageFormType = {
+  newMessageBody: string;
+};
+
 const Dialogs: React.FC<OwnPropsType> = props => {
   const state = props.dialogsPage;
 
@@ -19,7 +24,7 @@ const Dialogs: React.FC<OwnPropsType> = props => {
     <Message message={m.message} key={m.id} />
   ));
 
-  const addNewMessage = (values: { newMessageBody: string }) => {
+  const addNewMessage = (values: NewMessageFormType) => {
     props.sendMessage(values.newMessageBody);
   };
   return (

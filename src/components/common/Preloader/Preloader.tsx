@@ -1,5 +1,6 @@
 import preloader from "../../../assets/images/loading-3.gif";
-const Preloader = props => {
+
+const Preloader: React.FC = () => {
   return (
     <div style={{ backgroundColor: "white" }}>
       <img width="200" height="200" src={preloader} alt="pre" />

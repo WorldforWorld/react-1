@@ -1,21 +1,31 @@
-import { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import userPhoto from "../../../assets/images/user.png";
+import { ContactsType, ProfileType } from "../../../types/types";
 import Preloader from "../../common/Preloader/Preloader";
 import ProfileDataForm from "./ProfileDataForm";
 import s from "./ProfileInfo.module.css";
 import ProfileStatusWithHooks from "./ProfileStatusWithHooks";
-const ProfileInfo = props => {
+type PropsType = {
+  profile: ProfileType | null;
+  status: string;
+  updateStatus: (status: string) => void;
+  isOwner: boolean;
+  savePhoto: (file: File) => void;
+  saveProfile: (profile: ProfileType) => Promise<any>;
+};
+const ProfileInfo: React.FC<PropsType> = props => {
   const [editMode, setEditMode] = useState(false);
 
   if (!props.profile) {
     return <Preloader />;
   }
-  const onMainPhotoSelected = e => {
-    if (e.target.files.length) {
+  const onMainPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.length) {
       props.savePhoto(e.target.files[0]);
     }
   };
-  const onSubmit = formData => {
+  const onSubmit = (formData: ProfileType) => {
+    // todo: remove then
     props.saveProfile(formData).then(() => {
       setEditMode(false);
     });
@@ -52,8 +62,16 @@ const ProfileInfo = props => {
     </div>
   );
 };
-
-const ProfileData = ({ profile, isOwner, goToEditMode }) => {
+type ProfileDataPropsType = {
+  profile: ProfileType;
+  isOwner: boolean;
+  goToEditMode: () => void;
+};
+const ProfileData: React.FC<ProfileDataPropsType> = ({
+  profile,
+  isOwner,
+  goToEditMode,
+}) => {
   return (
     <div>
       {isOwner && (
@@ -82,7 +100,7 @@ const ProfileData = ({ profile, isOwner, goToEditMode }) => {
             <Contact
               key={key}
               contactTitle={key}
-              contactValue={profile.contacts[key]}
+              contactValue={profile.contacts[key as keyof ContactsType]}
             />
           );
         })}
@@ -90,8 +108,14 @@ const ProfileData = ({ profile, isOwner, goToEditMode }) => {
     </div>
   );
 };
-
-const Contact = ({ contactTitle, contactValue }) => {
+type ContactPropsType = {
+  contactValue: string;
+  contactTitle: string;
+};
+const Contact: React.FC<ContactPropsType> = ({
+  contactTitle,
+  contactValue,
+}) => {
   return (
     <div className={s.contact}>
       <b>{contactTitle}</b>: {contactValue}

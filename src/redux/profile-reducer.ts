@@ -10,7 +10,7 @@ const initialState = {
   ] as Array<PostType>,
   profile: null as ProfileType | null,
   status: "",
-  newPostText: "",
+  // newPostText: "",
 };
 
 const profileReducer = (
@@ -24,7 +24,7 @@ const profileReducer = (
         message: action.newPostText,
         likesCount: 0,
       };
-      return { ...state, posts: [...state.posts, newPost], newPostText: "" };
+      return { ...state, posts: [...state.posts, newPost] };
 
     case "SN/PROFILE/SET-USER-PROFILE":
       return { ...state, profile: action.profile };

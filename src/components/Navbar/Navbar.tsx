@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import s from "./Navbar.module.css";
-const Navbar = () => {
+const Navbar: React.FC = () => {
   return (
     <nav className={s.nav}>
       <div className={s.item}>
@@ -28,13 +28,13 @@ const Navbar = () => {
         </NavLink>
       </div>
       <div className={s.item}>
-        <a href="#">News</a>
+        <a href="#a">News</a>
       </div>
       <div className={s.item}>
-        <a href="#">Music</a>
+        <a href="#s">Music</a>
       </div>
       <div className={s.item}>
-        <a href="#">Settings</a>
+        <a href="#d">Settings</a>
       </div>
     </nav>
   );

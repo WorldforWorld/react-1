@@ -14,21 +14,26 @@ import Login from "./components/Login/Login";
 import Navbar from "./components/Navbar/Navbar";
 import UsersContainer from "./components/Users/UsersContainer";
 import Preloader from "./components/common/Preloader/Preloader";
-import { initializeApp } from "./redux/app-reduser.ts";
-import store from "./redux/redux-store";
-const ProfileContainer = lazy(() =>
-  import("./components/Profile/ProfileContainer")
+import { initializeApp } from "./redux/app-reduser";
+import store, { AppStateType } from "./redux/redux-store";
+const ProfileContainer = lazy(
+  () => import("./components/Profile/ProfileContainer")
 );
-const DialogsContainer = lazy(() =>
-  import("./components/Dialogs/DialogsContainer")
+const DialogsContainer = lazy(
+  () => import("./components/Dialogs/DialogsContainer")
 );
-export function withRouter(Children) {
+export function withRouter(Children: React.ComponentType) {
+  // @ts-ignore
   return props => {
     const match = { params: useParams() };
     return <Children {...props} match={match} />;
   };
 }
-class App extends React.Component {
+type MapPropsType = ReturnType<typeof mapStateToProps>;
+type DispatchPropsType = {
+  initializeApp: () => void;
+};
+class App extends React.Component<MapPropsType & DispatchPropsType> {
   componentDidMount() {
     this.props.initializeApp();
   }
@@ -43,6 +48,7 @@ class App extends React.Component {
         <div className="app-wrapper-content">
           <Suspense fallback={<Preloader />}>
             <Routes>
+              {/* @ts-ignore */}
               <Route exact path="/" element={<Navigate to={"/profile"} />} />
               <Route path="/dialogs" element={<DialogsContainer />} />
               <Route path="/profile/:userId?" element={<ProfileContainer />} />
@@ -59,14 +65,14 @@ class App extends React.Component {
     );
   }
 }
-const mapStateToProps = state => ({
-  initialized: state.app.state,
+const mapStateToProps = (state: AppStateType) => ({
+  initialized: state.app.initialized,
 });
-const AppContainer = compose(
+const AppContainer = compose<React.ComponentType>(
   withRouter,
   connect(mapStateToProps, { initializeApp })
 )(App);
-const SamuraiJSApp = props => {
+const SamuraiJSApp: React.FC = () => {
   return (
     <React.StrictMode>
       {/* HashRouter - только для gh-pages используется без basename */}
