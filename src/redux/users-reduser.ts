@@ -1,17 +1,24 @@
 import { Dispatch } from "react";
+import { APIResponseType } from "../api/api";
 import { UserType } from "../types/types";
 import { updateObjectInArray } from "../utils/object-helpers";
 import { usersAPI } from "./../api/users-api";
 import { AppStateType, BaseThunkType, InferActionsTypes } from "./redux-store";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 
 const initialState = {
   users: [] as Array<UserType>,
   pageSize: 5,
-  totalUserCount: 0,
+  totalCount: 0,
   portionSize: 10,
   currentPage: 1,
   isFetching: false,
   followingInProgress: [] as Array<number>, // array of users ids
+  filter: {
+    term: "",
+    friend: null as null | boolean,
+  },
 };
 const usersReducer = (
   state = initialState,
@@ -37,9 +44,11 @@ const usersReducer = (
     case "SN/USERS/SET_CURRENT_PAGE":
       return { ...state, currentPage: action.currentPage };
     case "SN/USERS/SET_TOTAL_USERS_COUNT":
-      return { ...state, totalUserCount: action.count };
+      return { ...state, totalCount: action.count };
     case "SN/USERS/TOGGLE_IS_FETCHING":
       return { ...state, isFetching: action.isFetching };
+    case "SN/USERS/SET_FILTER":
+      return { ...state, filter: action.payload };
     case "SN/USERS/TOGGLE_IS_FOLLOWING_PROGRESS":
       return {
         ...state,
@@ -78,33 +87,44 @@ export const actions = {
       type: "SN/USERS/TOGGLE_IS_FETCHING",
       isFetching,
     } as const),
-  setTotalUsersCount: (totalUserCount: number) =>
+  setTotalUsersCount: (totalCount: number) =>
     ({
       type: "SN/USERS/SET_TOTAL_USERS_COUNT",
-      count: totalUserCount,
+      count: totalCount,
     } as const),
   setCurrentPagep: (currentPage: number) =>
     ({
       type: "SN/USERS/SET_CURRENT_PAGE",
       currentPage,
     } as const),
+  setFilter: (filter: FilterType) =>
+    ({
+      type: "SN/USERS/SET_FILTER",
+      payload: filter,
+    } as const),
 };
 
 export const getUsers =
-  (page: number, pageSize: number): ThunkType =>
+  (page: number, pageSize: number, filter: FilterType): ThunkType =>
   async (dispath, getState) => {
     dispath(actions.toggleIsFetching(true));
     dispath(actions.setCurrentPagep(page));
+    dispath(actions.setFilter(filter));
 
-    const data = await usersAPI.getUsers(page, pageSize);
+    const data = await usersAPI.getUsers(
+      page,
+      pageSize,
+      filter.term,
+      filter.friend
+    );
     dispath(actions.toggleIsFetching(false));
     dispath(actions.setUsers(data.items));
-    dispath(actions.setTotalUsersCount(data.totalUserCount));
+    dispath(actions.setTotalUsersCount(data.totalCount));
   };
 const _followUnfollowFlow = async (
   dispath: Dispatch<ActionsTypes>,
   userId: number,
-  apiMethod: any,
+  apiMethod: (userId: number) => Promise<APIResponseType>,
   actionCreator: (userId: number) => ActionsTypes
 ) => {
   dispath(actions.toggleFollowingInProgress(true, userId));
@@ -117,21 +137,29 @@ const _followUnfollowFlow = async (
 export const follow =
   (userId: number): ThunkType =>
   async dispath => {
-    const apiMethod = usersAPI.follow.bind(usersAPI);
-    const actionCreator = actions.followSuccess;
-    _followUnfollowFlow(dispath, userId, apiMethod, actionCreator);
+    await _followUnfollowFlow(
+      dispath,
+      userId,
+      usersAPI.follow.bind(usersAPI),
+      actions.followSuccess
+    );
   };
 
 export const unfollow =
   (userId: number): ThunkType =>
   async dispath => {
-    const apiMethod = usersAPI.unfollow.bind(usersAPI);
-    const actionCreator = actions.unfollowSuccess;
-    _followUnfollowFlow(dispath, userId, apiMethod, actionCreator);
+    await _followUnfollowFlow(
+      dispath,
+      userId,
+      usersAPI.unfollow.bind(usersAPI),
+      actions.unfollowSuccess
+    );
   };
 
 export default usersReducer;
 
-type InitialState = typeof initialState;
+export type InitialState = typeof initialState;
+export type FilterType = typeof initialState.filter;
+
 type ActionsTypes = InferActionsTypes<typeof actions>;
 type ThunkType = BaseThunkType<ActionsTypes>;

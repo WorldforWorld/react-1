@@ -8,8 +8,8 @@ export const getPageSizeS = (state: AppStateType) => {
   return state.usersPage.pageSize;
 };
 
-export const getTotalUserCountS = (state: AppStateType) => {
-  return state.usersPage.totalUserCount;
+export const gettotalCountS = (state: AppStateType) => {
+  return state.usersPage.totalCount;
 };
 
 export const getCurrentPageS = (state: AppStateType) => {
@@ -22,4 +22,7 @@ export const getIsFetchingS = (state: AppStateType) => {
 
 export const getFollowingInProgressS = (state: AppStateType) => {
   return state.usersPage.followingInProgress;
+};
+export const getUsersFilter = (state: AppStateType) => {
+  return state.usersPage.filter;
 };

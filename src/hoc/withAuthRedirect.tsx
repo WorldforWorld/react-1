@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { AppStateType } from "../redux/redux-store";
 
 const mapStateToPropsFroRedirect = (state: AppStateType) => ({
@@ -10,14 +10,14 @@ type MapPropsType = {
   isAuth: boolean;
 };
 type DispatchPropsType = {};
-export function withAuthRedirect<WCP>(
+export function withAuthRedirect<WCP extends JSX.IntrinsicAttributes>(
   WrappedComponent: React.ComponentType<WCP>
 ) {
   const RedirectComponent: React.FC<
     MapPropsType & DispatchPropsType
   > = props => {
     const { isAuth, ...restProps } = props;
-    if (!isAuth) return <Navigate to={"/login"} />;
+    if (!isAuth) return <Redirect to={"/login"} />;
     return <WrappedComponent {...(restProps as WCP)} />;
   };
   const connectedAuthRedirectComponent = connect<

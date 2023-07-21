@@ -1,44 +1,42 @@
-import React, { Suspense, lazy } from "react";
+import React from "react";
 import { Provider, connect } from "react-redux";
 import {
   BrowserRouter,
-  Navigate,
+  Redirect,
   Route,
-  Routes,
-  useParams,
+  Switch,
+  withRouter,
 } from "react-router-dom";
 import { compose } from "redux";
 import "./App.css";
 import HeaderContainer from "./components/Header/HeaderContainer";
-import Login from "./components/Login/Login";
+import { Login } from "./components/Login/Login";
 import Navbar from "./components/Navbar/Navbar";
-import UsersContainer from "./components/Users/UsersContainer";
+import { UsersPage } from "./components/Users/UsersContainer";
 import Preloader from "./components/common/Preloader/Preloader";
+import { withSuspense } from "./hoc/withSuspense";
 import { initializeApp } from "./redux/app-reduser";
 import store, { AppStateType } from "./redux/redux-store";
-const ProfileContainer = lazy(
+const ProfileContainer = React.lazy(
   () => import("./components/Profile/ProfileContainer")
 );
-const DialogsContainer = lazy(
+const DialogsContainer = React.lazy(
   () => import("./components/Dialogs/DialogsContainer")
 );
-export function withRouter(Children: React.ComponentType) {
-  // @ts-ignore
-  return props => {
-    const match = { params: useParams() };
-    return <Children {...props} match={match} />;
-  };
-}
 type MapPropsType = ReturnType<typeof mapStateToProps>;
 type DispatchPropsType = {
   initializeApp: () => void;
 };
+
+const SuspendedDialogs = withSuspense(DialogsContainer);
+const SuspendedProfile = withSuspense(ProfileContainer);
+
 class App extends React.Component<MapPropsType & DispatchPropsType> {
   componentDidMount() {
     this.props.initializeApp();
   }
   render() {
-    if (this.props.initialized) {
+    if (!this.props.initialized) {
       return <Preloader />;
     }
     return (
@@ -46,20 +44,20 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
         <HeaderContainer />
         <Navbar />
         <div className="app-wrapper-content">
-          <Suspense fallback={<Preloader />}>
-            <Routes>
-              {/* @ts-ignore */}
-              <Route exact path="/" element={<Navigate to={"/profile"} />} />
-              <Route path="/dialogs" element={<DialogsContainer />} />
-              <Route path="/profile/:userId?" element={<ProfileContainer />} />
-              <Route
-                path="/users"
-                element={<UsersContainer pageTitle={"Самурай"} />}
-              />
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<div>404 NOT FOUND</div>} />
-            </Routes>
-          </Suspense>
+          <Switch>
+            <Route exact path="/" render={() => <Redirect to={"/profile"} />} />
+            <Route path="/dialogs" render={() => <SuspendedDialogs />} />
+            <Route
+              path="/profile/:userId?"
+              render={() => <SuspendedProfile />}
+            />
+            <Route
+              path="/users"
+              render={() => <UsersPage pageTitle={"Самурай"} />}
+            />
+            <Route path="/login" render={() => <Login />} />
+            <Route path="*" render={() => <div>404 NOT FOUND</div>} />
+          </Switch>
         </div>
       </div>
     );

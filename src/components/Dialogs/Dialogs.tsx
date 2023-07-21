@@ -1,4 +1,3 @@
-import { Navigate } from "react-router-dom";
 import { initialStateType } from "../../redux/dialogs-reducer";
 import AddMessageForm from "./AddMessageForm/AddMessageForm";
 import DialogItem from "./DialogItem/DialogItem";

@@ -1,4 +1,4 @@
-import { Field, InjectedFormProps, reduxForm } from "redux-form";
+import { InjectedFormProps, reduxForm } from "redux-form";
 import {
   maxLenthCreator,
   required,
@@ -21,12 +21,6 @@ const AddMessageForm: React.FC<
           [required, maxLength50],
           Textarea
         )}
-        <Field
-          component={Textarea}
-          validate={[required, maxLength50]}
-          name="newMessageBody"
-          placeholder="Enter your message"
-        />
       </div>
       <div>
         <button>Send</button>

@@ -15,7 +15,6 @@ type PropsType = {
 };
 const ProfileInfo: React.FC<PropsType> = props => {
   const [editMode, setEditMode] = useState(false);
-
   if (!props.profile) {
     return <Preloader />;
   }

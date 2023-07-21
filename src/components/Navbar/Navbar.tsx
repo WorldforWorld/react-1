@@ -4,26 +4,17 @@ const Navbar: React.FC = () => {
   return (
     <nav className={s.nav}>
       <div className={s.item}>
-        <NavLink
-          to="/profile"
-          className={({ isActive }) => (isActive ? s.active : s.item)}
-        >
+        <NavLink activeClassName={s.activeLink} to="/profile">
           Profile
         </NavLink>
       </div>
-      <div className={s.item}>
-        <NavLink
-          to="/dialogs"
-          className={({ isActive }) => (isActive ? s.active : s.item)}
-        >
+      <div className={`${s.item} ${s.active}`}>
+        <NavLink activeClassName={s.activeLink} to="/dialogs">
           Messages
         </NavLink>
       </div>
-      <div className={s.item}>
-        <NavLink
-          to="/users"
-          className={({ isActive }) => (isActive ? s.active : s.item)}
-        >
+      <div className={`${s.item} ${s.active}`}>
+        <NavLink activeClassName={s.activeLink} to="/users">
           Users
         </NavLink>
       </div>

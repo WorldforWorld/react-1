@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 type PropsType = {
   status: string;
   updateStatus: (status: string) => void;
