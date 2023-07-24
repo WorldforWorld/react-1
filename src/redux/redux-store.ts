@@ -14,6 +14,7 @@ import dialogsReducer from "./dialogs-reducer";
 import profileReducer from "./profile-reducer";
 import sidebarReducer from "./sidebar-reducer";
 import usersReducer from "./users-reduser";
+import chatReducer from "./chat-reduser";
 const rootReducers = combineReducers({
   profilePage: profileReducer,
   dialogsPage: dialogsReducer,
@@ -22,6 +23,7 @@ const rootReducers = combineReducers({
   auth: authReducer,
   form: FormReducer,
   app: appReducer,
+  chat: chatReducer,
 });
 
 type RootReducersType = typeof rootReducers;

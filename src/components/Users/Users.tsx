@@ -65,7 +65,7 @@ export const Users: React.FC<PropsType> = props => {
     if (filter.friend !== null) query.friend = String(filter.friend);
     if (currentPage) query.page = String(currentPage);
     history.push({
-      pathname: "/users",
+      pathname: "/developers",
       search: queryString.stringify(query),
     });
   }, [filter, currentPage]);

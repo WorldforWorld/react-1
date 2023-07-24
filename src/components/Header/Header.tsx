@@ -1,29 +1,61 @@
-import { NavLink } from "react-router-dom";
-import s from "./Header.module.css";
-export type MapPropsType = {
-  isAuth: boolean;
-  login: string | null;
-};
-export type DispatchPropsType = {
-  logout: () => void;
-};
-const Header: React.FC<MapPropsType & DispatchPropsType> = props => {
+import { Link } from "react-router-dom";
+
+import { UserOutlined } from "@ant-design/icons";
+import { Layout, Menu } from "antd";
+import Col from "antd/es/grid/col";
+import Row from "antd/es/grid/row";
+import Avatar from "antd/lib/avatar/avatar";
+import Button from "antd/lib/button";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/auth-reduser";
+import {
+  selectCurrentUserLogin,
+  selectIsAuth,
+} from "../../redux/auth-selectors";
+import { AppDispatch } from "../../redux/redux-store";
+export type MapPropsType = {};
+export const Header: React.FC<MapPropsType> = props => {
+  const { Header } = Layout;
+  const isAuth = useSelector(selectIsAuth);
+  const login = useSelector(selectCurrentUserLogin);
+
+  const dispatch: AppDispatch = useDispatch();
+
+  const logoutCallback = () => {
+    dispatch(logout());
+  };
+
   return (
-    <header className={s.header}>
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/3/33/Vanamo_Logo.png"
-        alt="logo"
-      />
-      <div className={s.loginBlock}>
-        {props.isAuth ? (
-          <div>
-            {props.login} - <button onClick={props.logout}>Log out</button>
-          </div>
+    <Header className="header">
+      <Row>
+        <Col span={18}>
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
+            <Menu.Item>
+              <Link to="/developers">Developers</Link>
+            </Menu.Item>
+          </Menu>
+        </Col>
+        {isAuth ? (
+          <>
+            <Col span={1}>
+              <Avatar
+                alt={login || ""}
+                style={{ backgroundColor: "#87d068" }}
+                icon={<UserOutlined />}
+              />
+            </Col>
+            <Col span={5}>
+              <Button onClick={logoutCallback}>Log out</Button>
+            </Col>
+          </>
         ) : (
-          <NavLink to="/login">Login</NavLink>
+          <Col span={6}>
+            <Button>
+              <Link to="/login">Login</Link>
+            </Button>
+          </Col>
         )}
-      </div>
-    </header>
+      </Row>
+    </Header>
   );
 };
-export default Header;

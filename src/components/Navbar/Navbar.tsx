@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
         </NavLink>
       </div>
       <div className={`${s.item} ${s.active}`}>
-        <NavLink activeClassName={s.activeLink} to="/users">
+        <NavLink activeClassName={s.activeLink} to="/developers">
           Users
         </NavLink>
       </div>
